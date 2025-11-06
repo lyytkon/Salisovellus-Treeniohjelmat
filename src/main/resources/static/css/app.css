@@ -1,0 +1,49 @@
+/* Kevyt facelift Bootstrapin päälle – ei vaadi HTML-rakenteen isoja muutoksia */
+:root {
+  --app-bg: #f7f9fc;
+  --app-card-bg: #ffffff;
+  --app-border: #e5e7eb;
+  --app-primary: #0d6efd; /* Bootstrap primary */
+}
+html, body { height: 100%; }
+body {
+  background: var(--app-bg);
+  color: #111827;
+}
+
+/* Peruslomakkeen siistintä nykyisellä <p><label><input> -rakenteella */
+form {
+  background: var(--app-card-bg);
+  border: 1px solid var(--app-border);
+  border-radius: .6rem;
+  box-shadow: 0 .25rem .75rem rgba(16,24,40,.06);
+  padding: 1.25rem;
+}
+form p { margin-bottom: .9rem; }
+label {
+  display: inline-block;
+  min-width: 180px;
+  color: #374151;
+  margin-right: .5rem;
+}
+input[type="text"],
+input[type="number"],
+select {
+  padding: .45rem .6rem;
+  border: 1px solid var(--app-border);
+  border-radius: .375rem;
+  outline: none;
+}
+input:focus, select:focus {
+  border-color: var(--app-primary);
+  box-shadow: 0 0 0 .2rem rgba(13,110,253,.15);
+}
+
+/* Taulukko */
+.table { background: var(--app-card-bg); }
+.table thead th {
+  white-space: nowrap;
+}
+
+/* Buttons pieni pehmennys */
+.btn { border-radius: .45rem; }

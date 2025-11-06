@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fi">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Lisää treeni</title>
+    <link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}"/>
+</head>
+<body class="container py-4">
+<h1>Lisää treeni</h1>
+
+<form th:action="@{/save}" th:object="${workout}" method="post" class="row g-3">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+    <div class="col-md-6">
+        <label class="form-label">Nimi</label>
+        <input class="form-control" type="text" th:field="*{name}" required/>
+    </div>
+    <div class="col-md-6">
+        <label class="form-label">Lihasryhmä</label>
+        <select class="form-select" th:field="*{muscleGroup.id}" required>
+            <option th:each="g : ${groups}" th:value="${g.id}" th:text="${g.name}">Rinta</option>
+        </select>
+    </div>
+    <div class="col-md-6">
+        <label class="form-label">Vaikeus</label>
+        <input class="form-control" type="text" th:field="*{difficulty}" placeholder="Helppo/Keskitaso/Haastava"/>
+    </div>
+    <div class="col-12">
+        <label class="form-label">Kuvaus</label>
+        <textarea class="form-control" rows="5" th:field="*{description}"></textarea>
+    </div>
+    <div class="col-12">
+        <button class="btn btn-success" type="submit">Tallenna</button>
+        <a class="btn btn-secondary" th:href="@{/workouts}">Peruuta</a>
+    </div>
+</form>
+</body>
+</html>

@@ -21,7 +21,7 @@
     <tr>
         <th>Nimi</th>
         <th>Lihasryhmä</th>
-        <th>Vaikeus</th>
+        <th>Kesto</th>
         <th>Toiminnot</th>
     </tr>
     </thead>
@@ -29,7 +29,7 @@
     <tr th:each="w : ${workouts}">
         <td th:text="${w.name}">Nimi</td>
         <td th:text="${w.muscleGroup != null ? w.muscleGroup.name : '-'}">Rinta</td>
-        <td th:text="${w.difficulty}">Keskitaso</td>
+        <td th:text="${w.duration}">60min</td>
         <td>
             <a class="btn btn-primary btn-sm" th:href="@{'/edit/' + ${w.id}}">Muokkaa</a>
             <a class="btn btn-danger btn-sm" th:href="@{'/delete/' + ${w.id}}">Poista</a>

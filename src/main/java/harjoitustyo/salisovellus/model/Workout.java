@@ -13,7 +13,8 @@ public class Workout {
     @Column(length = 2000)
     private String description;
 
-    private String difficulty; // Helppo/Keskitaso/Haastava
+    // Kesto esim. "30min", "60min", "90min"
+    private String duration;
 
     @ManyToOne
     @JoinColumn(name = "muscle_group_id")
@@ -21,11 +22,11 @@ public class Workout {
 
     public Workout() {}
 
-    public Workout(Long id, String name, String description, String difficulty, MuscleGroup muscleGroup) {
+    public Workout(Long id, String name, String description, String duration, MuscleGroup muscleGroup) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.difficulty = difficulty;
+        this.duration = duration;
         this.muscleGroup = muscleGroup;
     }
 
@@ -38,8 +39,8 @@ public class Workout {
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
 
-    public String getDifficulty() { return difficulty; }
-    public void setDifficulty(String difficulty) { this.difficulty = difficulty; }
+    public String getDuration() { return duration; }
+    public void setDuration(String duration) { this.duration = duration; }
 
     public MuscleGroup getMuscleGroup() { return muscleGroup; }
     public void setMuscleGroup(MuscleGroup muscleGroup) { this.muscleGroup = muscleGroup; }

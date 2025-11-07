@@ -23,9 +23,9 @@ public class SalisovellusApplication {
             MuscleGroup back = groups.save(new MuscleGroup(null, "Selkä"));
             MuscleGroup legs = groups.save(new MuscleGroup(null, "Jalat"));
 
-            workouts.save(new Workout(null, "Penkkipunnerrus 5x5", "Voimapainotteinen perussetti", "Keskitaso", chest));
-            workouts.save(new Workout(null, "Leuanvedot 3x max", "Leveä myötäote, progressiivinen ylikuormitus", "Haastava", back));
-            workouts.save(new Workout(null, "Takakyykky 5x5", "Tekniikkapainotteinen setti", "Keskitaso", legs));
+            workouts.save(new Workout(null, "Penkkipunnerrus 5x5", "Voimapainotteinen perussetti", "60min", chest));
+            workouts.save(new Workout(null, "Leuanvedot 3x max", "Leveä myötäote, progressiivinen ylikuormitus", "30min", back));
+            workouts.save(new Workout(null, "Takakyykky 5x5", "Tekniikkapainotteinen setti", "45min", legs));
         };
     }
 }

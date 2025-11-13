@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="fi">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Lisää suoritus</title>
+    <link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}"/>
+</head>
+<body class="container py-4">
+<h1>Lisää suoritus: <span th:text="${workout.name}">Liike</span></h1>
+
+<form th:action="@{/savesession}" th:object="${session}" method="post">
+    <input type="hidden" name="workoutId" th:value="${workout.id}"/>
+    
+    <div class="mb-3">
+        <label for="date" class="form-label">Päivämäärä</label>
+        <input type="date" class="form-control" id="date" th:field="*{date}" required/>
+    </div>
+    
+    <div class="mb-3">
+        <label for="sets" class="form-label">Sarjat (valinnainen)</label>
+        <input type="number" class="form-control" id="sets" th:field="*{sets}" min="1" placeholder="esim. 3"/>
+        <small class="form-text text-muted">Jos teit useita sarjoja, merkitse määrä tähän</small>
+    </div>
+    
+    <div class="mb-3">
+        <label for="reps" class="form-label">Toistot (per sarja)</label>
+        <input type="number" class="form-control" id="reps" th:field="*{reps}" min="1" required placeholder="esim. 8"/>
+    </div>
+    
+    <div class="mb-3">
+        <label for="weight" class="form-label">Paino (kg)</label>
+        <input type="number" step="0.5" class="form-control" id="weight" th:field="*{weight}" min="0" required placeholder="esim. 80"/>
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Tallenna</button>
+    <a class="btn btn-secondary" th:href="@{/workouts}">Peruuta</a>
+</form>
+
+</body>
+</html>

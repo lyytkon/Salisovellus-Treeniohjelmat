@@ -1,6 +1,7 @@
 package harjoitustyo.salisovellus.model;
 
 import jakarta.persistence.*;
+import java.util.List;
 
 @Entity
 public class Workout {
@@ -19,6 +20,9 @@ public class Workout {
     @ManyToOne
     @JoinColumn(name = "muscle_group_id")
     private MuscleGroup muscleGroup;
+
+    @OneToMany(mappedBy = "workout", cascade = CascadeType.ALL)
+    private List<WorkoutSession> sessions;
 
     public Workout() {}
 
@@ -44,4 +48,7 @@ public class Workout {
 
     public MuscleGroup getMuscleGroup() { return muscleGroup; }
     public void setMuscleGroup(MuscleGroup muscleGroup) { this.muscleGroup = muscleGroup; }
+
+    public List<WorkoutSession> getSessions() { return sessions; }
+    public void setSessions(List<WorkoutSession> sessions) { this.sessions = sessions; }
 }

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="fi">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:text="${workout.name}">Liike</title>
+    <link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}"/>
+    <style>
+        .session-item {
+            background-color: white;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+        .session-date {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #495057;
+        }
+        .session-details {
+            margin-top: 5px;
+            font-size: 1.05em;
+            color: #212529;
+        }
+        .weight-highlight {
+            color: #0d6efd;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="container py-4">
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 th:text="${workout.name}">Penkkipunnerrus</h1>
+        <span class="badge bg-secondary" th:text="${workout.muscleGroup != null ? workout.muscleGroup.name : '-'}">Rinta</span>
+    </div>
+    <div>
+        <a class="btn btn-secondary" th:href="@{/workouts}">← Takaisin</a>
+    </div>
+</div>
+
+<div sec:authorize="isAuthenticated()" class="alert alert-info d-flex align-items-center justify-content-between">
+    <span>Kirjautunut sisään: <strong sec:authentication="name"></strong></span>
+    <form th:action="@{/logout}" method="post" class="m-0">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+        <button class="btn btn-sm btn-outline-secondary" type="submit">Kirjaudu ulos</button>
+    </form>
+</div>
+
+<div class="mb-4">
+    <a class="btn btn-success" th:href="@{'/addsession/' + ${workout.id}}">+ Lisää uusi suoritus</a>
+    <a class="btn btn-outline-primary" th:href="@{'/edit/' + ${workout.id}}">Muokkaa liikettä</a>
+    <a sec:authorize="hasRole('ADMIN')" class="btn btn-outline-danger" th:href="@{'/delete/' + ${workout.id}}" 
+       onclick="return confirm('Haluatko varmasti poistaa tämän liikkeen ja kaikki sen suoritukset?')">Poista liike</a>
+</div>
+
+<h3>Suoritushistoria</h3>
+
+<div th:if="${sessions == null || #lists.isEmpty(sessions)}" class="alert alert-warning">
+    Ei vielä suorituksia. Lisää ensimmäinen suoritus yllä olevasta napista!
+</div>
+
+<div th:each="s : ${sessions}" class="session-item">
+    <div class="d-flex justify-content-between align-items-start">
+        <div>
+            <div class="session-date" th:text="${#temporals.format(s.date, 'dd.MM.yyyy')}">13.11.2025</div>
+            <div class="session-details">
+                <span th:if="${s.sets != null}">
+                    <strong th:text="${s.sets}">3</strong> sarjaa × 
+                </span>
+                <strong th:text="${s.reps}">8</strong> toistoa
+                <span class="weight-highlight">
+                    @ <span th:text="${s.weight}">80</span> kg
+                </span>
+            </div>
+        </div>
+        <a sec:authorize="hasRole('ADMIN')" class="btn btn-sm btn-outline-danger" 
+           th:href="@{'/deletesession/' + ${s.id}}" 
+           onclick="return confirm('Haluatko varmasti poistaa tämän suorituksen?')">Poista</a>
+    </div>
+</div>
+
+</body>
+</html>

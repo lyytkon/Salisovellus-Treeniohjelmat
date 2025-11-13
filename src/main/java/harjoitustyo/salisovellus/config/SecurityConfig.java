@@ -39,15 +39,15 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            // H2 console needs frame options and CSRF tweaks
-            .csrf(csrf -> csrf.ignoringRequestMatchers(PathRequest.toH2Console()))
-            .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()))
+            // Permit all, mutta poisto vaatii ADMIN-roolin
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 .requestMatchers("/h2-console/**").permitAll()
-                .requestMatchers("/delete/**").hasRole("ADMIN")
-                .anyRequest().authenticated()
+                .requestMatchers("/delete/**").hasRole("ADMIN")  // Vain admin voi poistaa
+                .anyRequest().permitAll()
             )
+            .csrf(csrf -> csrf.ignoringRequestMatchers(PathRequest.toH2Console()))  // H2-konsolille pois
+            .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()))
             .formLogin(login -> login.loginPage("/login").permitAll())
             .logout(Customizer.withDefaults());
         return http.build();

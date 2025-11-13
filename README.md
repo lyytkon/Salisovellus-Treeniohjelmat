@@ -1,11 +1,4 @@
-# Salisovellus – Treeniohjelmat
+# Salisovellus – Treeniseuranta liikkeittäin
 
-Lyhyt kuvaus: Tämä on backend-kurssin projekti, jonka tavoitteena on tarjota sovellus, josta löytyy treeniohjelmia eri lihasryhmille. Käyttäjät voivat lisätä omia ohjelmiaan sekä selata ja hyödyntää muiden lisäämiä ohjelmia.
+Tämä sovellus tarjoaa yksinkertaisen tavan seurata voimaharjoittelun kehitystä liikekohtaisesti. Etusivu näyttää listan liikkeistä (esim. Penkkipunnerrus, Ylätalja, Vinopenkki käsipainoilla). Liikettä klikkaamalla avautuu näkymä, jossa näkyy kaikki suoritukset päivämäärän ja käytetyn painon mukaan.
 
-## Ominaisuudet
-- Selaa treeniohjelmia lihasryhmän mukaan
-- Lisää omia treeniohjelmia
-- Katso ja selaa muiden käyttäjien ohjelmia
-
-## Tavoite
-- Toteuttaa selkeä rajapinta (backend), joka mahdollistaa ohjelmien haun, lisäämisen ja tarkastelun kurssin vaatimusten mukaisesti.

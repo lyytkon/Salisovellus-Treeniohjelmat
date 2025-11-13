@@ -33,6 +33,7 @@
     <div>
         <h1 th:text="${workout.name}">Penkkipunnerrus</h1>
         <span class="badge bg-secondary" th:text="${workout.muscleGroup != null ? workout.muscleGroup.name : '-'}">Rinta</span>
+        <span sec:authorize="hasRole('ADMIN')" class="badge bg-info ms-1" th:if="${workout.user != null}" th:text="'Käyttäjä: ' + ${workout.user.username}">Käyttäjä: admin</span>
     </div>
     <div>
         <a class="btn btn-secondary" th:href="@{/workouts}">← Takaisin</a>
@@ -52,6 +53,12 @@
     <a class="btn btn-outline-primary" th:href="@{'/edit/' + ${workout.id}}">Muokkaa liikettä</a>
     <a sec:authorize="hasRole('ADMIN')" class="btn btn-outline-danger" th:href="@{'/delete/' + ${workout.id}}" 
        onclick="return confirm('Haluatko varmasti poistaa tämän liikkeen ja kaikki sen suoritukset?')">Poista liike</a>
+</div>
+
+<!-- Kuvaus -->
+<div th:if="${workout.description != null && !workout.description.isEmpty()}" class="alert alert-light mb-4">
+    <h5>Kuvaus</h5>
+    <p class="mb-0" th:text="${workout.description}">Liikkeen kuvaus tähän</p>
 </div>
 
 <h3>Suoritushistoria</h3>

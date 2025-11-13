@@ -21,6 +21,10 @@ public class Workout {
     @JoinColumn(name = "muscle_group_id")
     private MuscleGroup muscleGroup;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     @OneToMany(mappedBy = "workout", cascade = CascadeType.ALL)
     private List<WorkoutSession> sessions;
 
@@ -48,6 +52,9 @@ public class Workout {
 
     public MuscleGroup getMuscleGroup() { return muscleGroup; }
     public void setMuscleGroup(MuscleGroup muscleGroup) { this.muscleGroup = muscleGroup; }
+
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
 
     public List<WorkoutSession> getSessions() { return sessions; }
     public void setSessions(List<WorkoutSession> sessions) { this.sessions = sessions; }

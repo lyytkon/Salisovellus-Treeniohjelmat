@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="fi">
 <head>
     <meta charset="UTF-8"/>
-    <title>Kirjaudu sisään</title>
+    <title>Rekisteröidy</title>
     <link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}"/>
 </head>
 <body class="container py-5">
@@ -10,20 +10,12 @@
     <div class="col-md-6">
         <div class="card">
             <div class="card-header">
-                <h3>Kirjaudu sisään</h3>
+                <h3>Luo uusi tili</h3>
             </div>
             <div class="card-body">
-                <div th:if="${success}" class="alert alert-success" th:text="${success}">Onnistui</div>
-                <div th:if="${param.error}" class="alert alert-danger">
-                    Virheellinen käyttäjänimi tai salasana
-                </div>
-                <div th:if="${param.logout}" class="alert alert-info">
-                    Olet kirjautunut ulos
-                </div>
+                <div th:if="${error}" class="alert alert-danger" th:text="${error}">Virhe</div>
                 
-                <form th:action="@{/login}" method="post">
-                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                    
+                <form th:action="@{/signup}" method="post">
                     <div class="mb-3">
                         <label for="username" class="form-label">Käyttäjänimi</label>
                         <input type="text" class="form-control" id="username" name="username" required autofocus/>
@@ -32,13 +24,19 @@
                     <div class="mb-3">
                         <label for="password" class="form-label">Salasana</label>
                         <input type="password" class="form-control" id="password" name="password" required/>
+                        <small class="form-text text-muted">Vähintään 4 merkkiä</small>
                     </div>
                     
-                    <button type="submit" class="btn btn-primary w-100">Kirjaudu sisään</button>
+                    <div class="mb-3">
+                        <label for="confirmPassword" class="form-label">Vahvista salasana</label>
+                        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required/>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary w-100">Rekisteröidy</button>
                 </form>
             </div>
             <div class="card-footer text-center">
-                Eikö sinulla ole tiliä? <a th:href="@{/signup}">Rekisteröidy tästä</a>
+                Onko sinulla jo tili? <a th:href="@{/login}">Kirjaudu sisään</a>
             </div>
         </div>
     </div>

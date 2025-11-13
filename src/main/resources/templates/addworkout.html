@@ -20,10 +20,6 @@
             <option th:each="g : ${groups}" th:value="${g.id}" th:text="${g.name}">Rinta</option>
         </select>
     </div>
-    <div class="col-md-6">
-        <label class="form-label">Kesto</label>
-        <input class="form-control" type="text" th:field="*{duration}" placeholder="esim. 30min, 60min, 90min" />
-    </div>
     <div class="col-12">
         <label class="form-label">Kuvaus</label>
         <textarea class="form-control" rows="5" th:field="*{description}"></textarea>

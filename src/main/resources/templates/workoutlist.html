@@ -57,6 +57,7 @@
         <div class="workout-name" th:text="${w.name}">Penkkipunnerrus</div>
         <div class="workout-info">
             <span class="badge bg-secondary" th:text="${w.muscleGroup != null ? w.muscleGroup.name : '-'}">Rinta</span>
+            <span sec:authorize="hasRole('ADMIN')" class="badge bg-info ms-1" th:if="${w.user != null}" th:text="'Käyttäjä: ' + ${w.user.username}">Käyttäjä: admin</span>
         </div>
     </a>
 </div>

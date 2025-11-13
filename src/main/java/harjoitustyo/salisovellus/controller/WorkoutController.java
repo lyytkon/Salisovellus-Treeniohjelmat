@@ -1,16 +1,22 @@
 package harjoitustyo.salisovellus.controller;
 
+import harjoitustyo.salisovellus.model.User;
 import harjoitustyo.salisovellus.model.Workout;
 import harjoitustyo.salisovellus.model.WorkoutSession;
 import harjoitustyo.salisovellus.repository.MuscleGroupRepository;
+import harjoitustyo.salisovellus.repository.UserRepository;
 import harjoitustyo.salisovellus.repository.WorkoutRepository;
 import harjoitustyo.salisovellus.repository.WorkoutSessionRepository;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Controller
 public class WorkoutController {
@@ -18,16 +24,36 @@ public class WorkoutController {
     private final WorkoutRepository workoutRepository;
     private final MuscleGroupRepository muscleGroupRepository;
     private final WorkoutSessionRepository workoutSessionRepository;
+    private final UserRepository userRepository;
 
-    public WorkoutController(WorkoutRepository workoutRepository, MuscleGroupRepository muscleGroupRepository, WorkoutSessionRepository workoutSessionRepository) {
+    public WorkoutController(WorkoutRepository workoutRepository, 
+                           MuscleGroupRepository muscleGroupRepository, 
+                           WorkoutSessionRepository workoutSessionRepository,
+                           UserRepository userRepository) {
         this.workoutRepository = workoutRepository;
         this.muscleGroupRepository = muscleGroupRepository;
         this.workoutSessionRepository = workoutSessionRepository;
+        this.userRepository = userRepository;
     }
 
     @GetMapping("/workouts")
-    public String list(Model model) {
-        model.addAttribute("workouts", workoutRepository.findAll());
+    public String list(Model model, Authentication auth) {
+        List<Workout> workouts;
+        
+        // Jos admin, näytä kaikki liikkeet
+        if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            workouts = StreamSupport.stream(workoutRepository.findAll().spliterator(), false)
+                    .collect(Collectors.toList());
+        } else {
+            // Muuten näytä vain kirjautuneen käyttäjän liikkeet
+            User currentUser = userRepository.findByUsername(auth.getName())
+                    .orElseThrow(() -> new RuntimeException("Käyttäjää ei löytynyt"));
+            workouts = StreamSupport.stream(workoutRepository.findAll().spliterator(), false)
+                    .filter(w -> w.getUser() != null && w.getUser().getId().equals(currentUser.getId()))
+                    .collect(Collectors.toList());
+        }
+        
+        model.addAttribute("workouts", workouts);
         return "workoutlist";
     }
 
@@ -56,11 +82,17 @@ public class WorkoutController {
     }
 
     @PostMapping("/save")
-    public String save(@ModelAttribute Workout workout) {
+    public String save(@ModelAttribute Workout workout, Authentication auth) {
         if (workout.getMuscleGroup() != null && workout.getMuscleGroup().getId() != null) {
             muscleGroupRepository.findById(workout.getMuscleGroup().getId())
                     .ifPresent(workout::setMuscleGroup);
         }
+        
+        // Aseta käyttäjä
+        User currentUser = userRepository.findByUsername(auth.getName())
+                .orElseThrow(() -> new RuntimeException("Käyttäjää ei löytynyt"));
+        workout.setUser(currentUser);
+        
         workoutRepository.save(workout);
         return "redirect:/workouts";
     }

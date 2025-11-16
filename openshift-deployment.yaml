@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: salisovellus
+  labels:
+    app: salisovellus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: salisovellus
+  template:
+    metadata:
+      labels:
+        app: salisovellus
+    spec:
+      containers:
+      - name: salisovellus
+        image: image-registry.openshift-image-registry.svc:5000/NAMESPACE/salisovellus:latest
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        resources:
+          limits:
+            memory: 1Gi
+            cpu: 500m
+          requests:
+            memory: 512Mi
+            cpu: 100m
+        livenessProbe:
+          httpGet:
+            path: /login
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /login
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: salisovellus
+  labels:
+    app: salisovellus
+spec:
+  ports:
+  - port: 8080
+    targetPort: 8080
+    protocol: TCP
+    name: http
+  selector:
+    app: salisovellus
+  type: ClusterIP
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: salisovellus
+  labels:
+    app: salisovellus
+spec:
+  to:
+    kind: Service
+    name: salisovellus
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect

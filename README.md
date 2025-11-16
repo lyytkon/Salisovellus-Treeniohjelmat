@@ -11,7 +11,7 @@ Tämä sovellus tarjoaa yksinkertaisen tavan seurata voimaharjoittelun kehityst�
 - Käyttäjätunnus: `user`
 - Salasana: `user`
 
-## 🗄️ Tietokanta
+## Tietokanta
 
 Sovellus käyttää **PostgreSQL-tietokantaa** Rahti-ympäristössä. Tietokanta sisältää seuraavat taulut:
 

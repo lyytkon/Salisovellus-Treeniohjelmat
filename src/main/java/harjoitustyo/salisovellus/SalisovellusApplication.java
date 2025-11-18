@@ -12,6 +12,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.stream.StreamSupport;
+
 @SpringBootApplication
 public class SalisovellusApplication {
 
@@ -22,6 +24,25 @@ public class SalisovellusApplication {
     @Bean
     CommandLineRunner seed(MuscleGroupRepository groups, UserRepository users, WorkoutRepository workouts, PasswordEncoder encoder) {
         return args -> {
+            // Tarkista onko yhteiset liikkeet jo luotu
+            long commonWorkoutsCount = StreamSupport.stream(workouts.findAll().spliterator(), false)
+                    .filter(w -> w.getUser() == null)
+                    .count();
+            
+            if (commonWorkoutsCount > 0) {
+                System.out.println("Yhteiset liikkeet on jo luotu (" + commonWorkoutsCount + " kpl)");
+                // Luo silti admin jos puuttuu
+                if (users.findByUsername("admin").isEmpty()) {
+                    User admin = new User();
+                    admin.setUsername("admin");
+                    admin.setPasswordHash(encoder.encode("admin"));
+                    admin.setRole("ADMIN");
+                    users.save(admin);
+                    System.out.println("Admin-käyttäjä luotu: admin/admin");
+                }
+                return;
+            }
+            
             // Lihasryhmät
             MuscleGroup chest = groups.save(new MuscleGroup(null, "Rinta"));
             MuscleGroup back = groups.save(new MuscleGroup(null, "Selkä"));
@@ -31,16 +52,13 @@ public class SalisovellusApplication {
             MuscleGroup core = groups.save(new MuscleGroup(null, "Keskivartalo"));
 
             // Luo admin-käyttäjä jos ei ole olemassa
-            User admin = null;
             if (users.findByUsername("admin").isEmpty()) {
-                admin = new User();
+                User admin = new User();
                 admin.setUsername("admin");
                 admin.setPasswordHash(encoder.encode("admin"));
                 admin.setRole("ADMIN");
-                admin = users.save(admin);
+                users.save(admin);
                 System.out.println("Admin-käyttäjä luotu: admin/admin");
-            } else {
-                admin = users.findByUsername("admin").get();
             }
 
             // Luo yleiset saliharjoitukset kaikille käyttäjille (user = null)

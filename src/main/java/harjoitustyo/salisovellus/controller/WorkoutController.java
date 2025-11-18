@@ -45,11 +45,12 @@ public class WorkoutController {
             workouts = StreamSupport.stream(workoutRepository.findAll().spliterator(), false)
                     .collect(Collectors.toList());
         } else {
-            // Muuten näytä vain kirjautuneen käyttäjän liikkeet
+            // Muille käyttäjille: näytä yhteiset liikkeet (user = null) + omat liikkeet
             User currentUser = userRepository.findByUsername(auth.getName())
                     .orElseThrow(() -> new RuntimeException("Käyttäjää ei löytynyt"));
             workouts = StreamSupport.stream(workoutRepository.findAll().spliterator(), false)
-                    .filter(w -> w.getUser() != null && w.getUser().getId().equals(currentUser.getId()))
+                    .filter(w -> w.getUser() == null || // Yhteiset liikkeet
+                               (w.getUser() != null && w.getUser().getId().equals(currentUser.getId()))) // Omat liikkeet
                     .collect(Collectors.toList());
         }
         

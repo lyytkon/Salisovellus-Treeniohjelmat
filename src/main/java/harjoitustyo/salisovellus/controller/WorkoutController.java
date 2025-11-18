@@ -137,9 +137,31 @@ public class WorkoutController {
     }
 
     @GetMapping("/deletesession/{id}")
-    public String deleteSession(@PathVariable Long id) {
-        workoutSessionRepository.deleteById(id);
-        return "redirect:/workouts";
+    public String deleteSession(@PathVariable Long id, Authentication auth) {
+        Optional<WorkoutSession> sessionOpt = workoutSessionRepository.findById(id);
+        if (sessionOpt.isEmpty()) {
+            return "redirect:/workouts";
+        }
+        
+        WorkoutSession session = sessionOpt.get();
+        Long workoutId = session.getWorkout().getId();
+        
+        // Admin voi poistaa kaikkien sessioita
+        if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            workoutSessionRepository.deleteById(id);
+            return "redirect:/workout/" + workoutId;
+        }
+        
+        // Käyttäjä voi poistaa vain omia sessioitaan
+        User currentUser = userRepository.findByUsername(auth.getName())
+                .orElseThrow(() -> new RuntimeException("Käyttäjää ei löytynyt"));
+        
+        if (session.getWorkout().getUser() != null && 
+            session.getWorkout().getUser().getId().equals(currentUser.getId())) {
+            workoutSessionRepository.deleteById(id);
+        }
+        
+        return "redirect:/workout/" + workoutId;
     }
 
     @GetMapping("/login")

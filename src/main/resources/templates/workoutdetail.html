@@ -81,9 +81,11 @@
                 </span>
             </div>
         </div>
-        <a sec:authorize="hasRole('ADMIN')" class="btn btn-sm btn-outline-danger" 
+        <a class="btn btn-sm btn-outline-danger" 
            th:href="@{'/deletesession/' + ${s.id}}" 
-           onclick="return confirm('Haluatko varmasti poistaa tämän suorituksen?')">Poista</a>
+           onclick="return confirm('Haluatko varmasti poistaa tämän suorituksen?')">
+            Poista
+        </a>
     </div>
 </div>
 

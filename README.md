@@ -12,7 +12,7 @@ Tämä sovellus tarjoaa yksinkertaisen tavan seurata voimaharjoittelun kehityst�
 - Käyttäjätunnus: `testi`
 - Salasana: `testi`
 
-## ✨ Ominaisuudet
+##  Ominaisuudet
 
 ### Käyttäjille
 - **Valmiit harjoitusliikkeet** - Sovelluksessa on valmiina 30+ yleisintä saliharjoitusliikettä (kyykky, penkkipunnerrus, leuanveto, jne.)

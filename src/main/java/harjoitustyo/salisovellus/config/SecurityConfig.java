@@ -32,7 +32,7 @@ public class SecurityConfig {
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 .requestMatchers("/h2-console/**").permitAll()
                 .requestMatchers("/login", "/signup").permitAll()
-                .requestMatchers("/delete/**", "/deletesession/**").hasRole("ADMIN")
+                .requestMatchers("/delete/**", "/deletesession/**", "/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )
             .csrf(csrf -> csrf.ignoringRequestMatchers(PathRequest.toH2Console()))

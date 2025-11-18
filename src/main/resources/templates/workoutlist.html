@@ -45,6 +45,9 @@
 
 <div class="mb-3">
     <a class="btn btn-success" th:href="@{/add}">+ Lisää uusi liike</a>
+    <a sec:authorize="hasRole('ADMIN')" class="btn btn-primary ms-2" th:href="@{/admin/users}">
+        👥 Hallinnoi käyttäjiä
+    </a>
 </div>
 
 <div th:if="${workouts == null || #lists.isEmpty(workouts)}" class="alert alert-warning">

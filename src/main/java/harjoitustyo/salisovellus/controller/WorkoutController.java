@@ -54,6 +54,20 @@ public class WorkoutController {
                     .collect(Collectors.toList());
         }
         
+        // Järjestä liikkeet viimeisimmän suorituksen mukaan (uusin ensin)
+        workouts.sort((w1, w2) -> {
+            List<WorkoutSession> sessions1 = workoutSessionRepository.findByWorkoutIdOrderByDateDesc(w1.getId());
+            List<WorkoutSession> sessions2 = workoutSessionRepository.findByWorkoutIdOrderByDateDesc(w2.getId());
+            
+            // Jos ei suorituksia, laita loppuun
+            if (sessions1.isEmpty() && sessions2.isEmpty()) return 0;
+            if (sessions1.isEmpty()) return 1;
+            if (sessions2.isEmpty()) return -1;
+            
+            // Vertaa viimeisimpiä suorituspäiviä (uusin ensin)
+            return sessions2.get(0).getDate().compareTo(sessions1.get(0).getDate());
+        });
+        
         model.addAttribute("workouts", workouts);
         return "workoutlist";
     }
@@ -114,10 +128,26 @@ public class WorkoutController {
     }
 
     @GetMapping("/edit/{id}")
-    public String editForm(@PathVariable Long id, Model model) {
+    public String editForm(@PathVariable Long id, Model model, Authentication auth) {
         Optional<Workout> w = workoutRepository.findById(id);
         if (w.isEmpty()) return "redirect:/workouts";
-        model.addAttribute("workout", w.get());
+        
+        Workout workout = w.get();
+        // Estä yhteisten liikkeiden (user == null) muokkaaminen
+        if (workout.getUser() == null) {
+            return "redirect:/workouts";
+        }
+        
+        // Varmista, että käyttäjä voi muokata vain omia liikkeitään (paitsi admin)
+        if (!auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+            User currentUser = userRepository.findByUsername(auth.getName())
+                    .orElseThrow(() -> new RuntimeException("Käyttäjää ei löytynyt"));
+            if (!workout.getUser().equals(currentUser)) {
+                return "redirect:/workouts";
+            }
+        }
+        
+        model.addAttribute("workout", workout);
         model.addAttribute("groups", muscleGroupRepository.findAll());
         return "editworkout";
     }

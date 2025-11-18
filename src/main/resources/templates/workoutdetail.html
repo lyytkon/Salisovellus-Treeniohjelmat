@@ -50,7 +50,8 @@
 
 <div class="mb-4">
     <a class="btn btn-success" th:href="@{'/addsession/' + ${workout.id}}">+ Lisää uusi suoritus</a>
-    <a class="btn btn-outline-primary" th:href="@{'/edit/' + ${workout.id}}">Muokkaa liikettä</a>
+    <!-- Vain omia liikkeitä voi muokata -->
+    <a th:if="${workout.user != null}" class="btn btn-outline-primary" th:href="@{'/edit/' + ${workout.id}}">Muokkaa liikettä</a>
     <a sec:authorize="hasRole('ADMIN')" class="btn btn-outline-danger" th:href="@{'/delete/' + ${workout.id}}" 
        onclick="return confirm('Haluatko varmasti poistaa tämän liikkeen ja kaikki sen suoritukset?')">Poista liike</a>
 </div>

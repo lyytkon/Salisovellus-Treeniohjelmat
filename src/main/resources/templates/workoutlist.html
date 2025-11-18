@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="fi">
 <head>
     <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Treenit</title>
     <link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}"/>
     <style>
@@ -15,6 +16,8 @@
             align-items: center;
             justify-content: space-between;
             transition: background-color 0.2s;
+            flex-wrap: wrap;
+            gap: 10px;
         }
         .workout-item-container:hover {
             background-color: #e9ecef;
@@ -23,6 +26,7 @@
             text-decoration: none;
             color: inherit;
             flex-grow: 1;
+            min-width: 200px;
         }
         .workout-link:hover {
             text-decoration: none;
@@ -38,7 +42,24 @@
         }
         .add-session-btn {
             flex-shrink: 0;
-            margin-left: 15px;
+            white-space: nowrap;
+        }
+        
+        /* Responsiivisuus pienille näytöille */
+        @media (max-width: 576px) {
+            .workout-name {
+                font-size: 1.2em;
+            }
+            .workout-item-container {
+                padding: 12px;
+            }
+            .add-session-btn {
+                width: 100%;
+                margin-top: 5px;
+            }
+            .btn {
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
@@ -53,9 +74,9 @@
     </form>
 </div>
 
-<div class="mb-3">
+<div class="mb-3 d-flex flex-wrap gap-2">
     <a class="btn btn-success" th:href="@{/add}">+ Lisää uusi liike</a>
-    <a sec:authorize="hasRole('ADMIN')" class="btn btn-primary ms-2" th:href="@{/admin/users}">
+    <a sec:authorize="hasRole('ADMIN')" class="btn btn-primary" th:href="@{/admin/users}">
         👥 Hallinnoi käyttäjiä
     </a>
 </div>

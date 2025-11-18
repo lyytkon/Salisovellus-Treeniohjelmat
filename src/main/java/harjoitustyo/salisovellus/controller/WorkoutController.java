@@ -59,11 +59,20 @@ public class WorkoutController {
     }
 
     @GetMapping("/workout/{id}")
-    public String workoutDetail(@PathVariable Long id, Model model) {
+    public String workoutDetail(@PathVariable Long id, Model model, Authentication auth) {
         Optional<Workout> workout = workoutRepository.findById(id);
         if (workout.isEmpty()) return "redirect:/workouts";
         
         List<WorkoutSession> sessions = workoutSessionRepository.findByWorkoutIdOrderByDateDesc(id);
+        
+        // Admin näkee kaikki sessiot, muut vain omat
+        if (!auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            User currentUser = userRepository.findByUsername(auth.getName())
+                    .orElseThrow(() -> new RuntimeException("Käyttäjää ei löytynyt"));
+            sessions = sessions.stream()
+                    .filter(s -> s.getUser() != null && s.getUser().getId().equals(currentUser.getId()))
+                    .collect(Collectors.toList());
+        }
         
         model.addAttribute("workout", workout.get());
         model.addAttribute("sessions", sessions);
@@ -127,10 +136,16 @@ public class WorkoutController {
     }
 
     @PostMapping("/savesession")
-    public String saveSession(@ModelAttribute WorkoutSession session, @RequestParam Long workoutId) {
+    public String saveSession(@ModelAttribute WorkoutSession session, @RequestParam Long workoutId, Authentication auth) {
         Optional<Workout> workout = workoutRepository.findById(workoutId);
         if (workout.isPresent()) {
             session.setWorkout(workout.get());
+            
+            // Aseta nykyinen käyttäjä sessiolle
+            User currentUser = userRepository.findByUsername(auth.getName())
+                    .orElseThrow(() -> new RuntimeException("Käyttäjää ei löytynyt"));
+            session.setUser(currentUser);
+            
             workoutSessionRepository.save(session);
         }
         return "redirect:/workout/" + workoutId;

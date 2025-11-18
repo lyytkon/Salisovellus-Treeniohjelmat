@@ -70,7 +70,12 @@
 <div th:each="s : ${sessions}" class="session-item">
     <div class="d-flex justify-content-between align-items-start">
         <div>
-            <div class="session-date" th:text="${#temporals.format(s.date, 'dd.MM.yyyy')}">13.11.2025</div>
+            <div class="d-flex align-items-center gap-2">
+                <div class="session-date" th:text="${#temporals.format(s.date, 'dd.MM.yyyy')}">13.11.2025</div>
+                <span sec:authorize="hasRole('ADMIN')" th:if="${s.user != null}" class="badge bg-info text-dark">
+                    <span th:text="${s.user.username}">käyttäjä</span>
+                </span>
+            </div>
             <div class="session-details">
                 <span th:if="${s.sets != null}">
                     <strong th:text="${s.sets}">3</strong> sarjaa × 
@@ -84,7 +89,7 @@
         <a class="btn btn-sm btn-outline-danger" 
            th:href="@{'/deletesession/' + ${s.id}}" 
            onclick="return confirm('Haluatko varmasti poistaa tämän suorituksen?')">
-            Poista
+            🗑️ Poista
         </a>
     </div>
 </div>

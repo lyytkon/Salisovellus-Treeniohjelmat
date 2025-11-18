@@ -19,7 +19,7 @@ Tämä sovellus tarjoaa yksinkertaisen tavan seurata voimaharjoittelun kehityst�
 - **Omat liikkeet** - Käyttäjät voivat lisätä omia harjoitusliikkeitä
 - **Suoritusten kirjaus** - Jokaisen liikkeen kohdalla voi kirjata suorituksia (päivämäärä, painot, toistot, sarjat)
 - **Suoritusten poisto** - Käyttäjä voi poistaa omia suorituskertojaan
-- **Henkilökohtainen seuranta** - Jokainen käyttäjä näkee omat ja yhteiset liikkeet
+- **Henkilökohtainen seuranta** - Jokainen käyttäjä näkee omat liikkeet
 
 ### Admin-käyttäjälle
 - **Käyttäjien hallinta** - Admin näkee kaikki rekisteröityneet käyttäjät ja voi poistaa käyttäjiä

@@ -13,6 +13,10 @@ public class WorkoutSession {
     @JoinColumn(name = "workout_id")
     private Workout workout;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     private LocalDate date;
     private Integer reps; // toistot
     private Double weight; // paino (kg)
@@ -33,6 +37,9 @@ public class WorkoutSession {
 
     public Workout getWorkout() { return workout; }
     public void setWorkout(Workout workout) { this.workout = workout; }
+
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
 
     public LocalDate getDate() { return date; }
     public void setDate(LocalDate date) { this.date = date; }
